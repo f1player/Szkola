@@ -1,0 +1,173 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Wrz 18, 2025 at 10:51 AM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `polska`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `miasta`
+--
+
+CREATE TABLE `miasta` (
+  `id` int(11) NOT NULL,
+  `nazwa` varchar(100) NOT NULL,
+  `powiat` int(11) NOT NULL,
+  `wojewodztwo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `miasta`
+--
+
+INSERT INTO `miasta` (`id`, `nazwa`, `powiat`, `wojewodztwo`) VALUES
+(1, 'Warszawa', 1, 1),
+(2, 'Piaseczno', 1, 1),
+(3, 'Radom', 2, 1),
+(4, 'Kraków', 3, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `osoby`
+--
+
+CREATE TABLE `osoby` (
+  `id` int(11) NOT NULL,
+  `nazwa` varchar(100) NOT NULL,
+  `powiat` int(11) NOT NULL,
+  `miasto` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `osoby`
+--
+
+INSERT INTO `osoby` (`id`, `nazwa`, `powiat`, `miasto`) VALUES
+(1, 'Jan Kowalski', 1, NULL),
+(2, 'Anna Nowak', 1, NULL),
+(3, 'Piotr Zieliński', 2, NULL),
+(4, 'Maria Wiśniewska', 3, NULL),
+(5, 'Tomasz Lewandowski', 3, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `powiaty`
+--
+
+CREATE TABLE `powiaty` (
+  `id` int(11) NOT NULL,
+  `nazwa` varchar(100) NOT NULL,
+  `wojewodztwo` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `powiaty`
+--
+
+INSERT INTO `powiaty` (`id`, `nazwa`, `wojewodztwo`) VALUES
+(1, 'Warszawa', 1),
+(2, 'Radom', 1),
+(3, 'Kraków', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `wojewodztwa`
+--
+
+CREATE TABLE `wojewodztwa` (
+  `id` int(11) NOT NULL,
+  `nazwa` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `wojewodztwa`
+--
+
+INSERT INTO `wojewodztwa` (`id`, `nazwa`) VALUES
+(1, 'Mazowieckie'),
+(2, 'Małopolskie');
+
+--
+-- Indeksy dla zrzutów tabel
+--
+
+--
+-- Indeksy dla tabeli `miasta`
+--
+ALTER TABLE `miasta`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `powiat` (`powiat`),
+  ADD KEY `wojewodztwo` (`wojewodztwo`);
+
+--
+-- Indeksy dla tabeli `osoby`
+--
+ALTER TABLE `osoby`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `powiat` (`powiat`),
+  ADD KEY `miasto` (`miasto`);
+
+--
+-- Indeksy dla tabeli `powiaty`
+--
+ALTER TABLE `powiaty`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `wojewodztwo` (`wojewodztwo`);
+
+--
+-- Indeksy dla tabeli `wojewodztwa`
+--
+ALTER TABLE `wojewodztwa`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `miasta`
+--
+ALTER TABLE `miasta`
+  ADD CONSTRAINT `miasta_ibfk_1` FOREIGN KEY (`powiat`) REFERENCES `powiaty` (`id`),
+  ADD CONSTRAINT `miasta_ibfk_2` FOREIGN KEY (`wojewodztwo`) REFERENCES `wojewodztwa` (`id`);
+
+--
+-- Constraints for table `osoby`
+--
+ALTER TABLE `osoby`
+  ADD CONSTRAINT `osoby_ibfk_1` FOREIGN KEY (`powiat`) REFERENCES `powiaty` (`id`),
+  ADD CONSTRAINT `osoby_ibfk_2` FOREIGN KEY (`miasto`) REFERENCES `miasta` (`id`),
+  ADD CONSTRAINT `osoby_ibfk_3` FOREIGN KEY (`miasto`) REFERENCES `miasta` (`id`),
+  ADD CONSTRAINT `osoby_ibfk_4` FOREIGN KEY (`miasto`) REFERENCES `miasta` (`id`);
+
+--
+-- Constraints for table `powiaty`
+--
+ALTER TABLE `powiaty`
+  ADD CONSTRAINT `powiaty_ibfk_1` FOREIGN KEY (`wojewodztwo`) REFERENCES `wojewodztwa` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
