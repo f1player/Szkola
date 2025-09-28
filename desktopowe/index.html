@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odtwarzacz MP3</title>
+</head>
+<body>
+  <h2> Odtwarzacz MP3</h2>
+
+  <input type="file" id="fileInput" accept="audio/*"><br><br>
+
+  <button id="play">Rozpocznij odtwarzanie</button>
+  <button id="stop">Przerwij odtwarzanie</button>
+
+  <p id="info">Nie wybrano pliku</p>
+
+  <audio id="player" controls hidden></audio>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const playBtn = document.getElementById('play');
+    const stopBtn = document.getElementById('stop');
+    const player = document.getElementById('player');
+    const info = document.getElementById('info');
+
+    let currentObjectUrl = 0;
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+      currentObjectUrl = URL.createObjectURL(file);
+      player.src = currentObjectUrl;
+      info.textContent = `Wybrano: ${file.name}`;
+    });
+
+    playBtn.addEventListener('click', () => {
+      if (player.src) player.play();
+    });
+
+    stopBtn.addEventListener('click', () => {
+      player.pause();
+      player.currentTime = 0;
+    });
+
+    window.addEventListener('beforeunload', () => {
+      if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+    });
+  </script>
+</body>
+</html>
