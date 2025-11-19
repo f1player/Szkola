@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Średnia ocen</title>
+<style>
+    body {
+        text-align: center;
+        font-family: Arial;
+        margin: 20px;
+    }
+    input {
+        width: 200px;
+        padding: 5px;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    #wynik {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<label>Wprowadź oceny (oddzielone przecinkami):</label><br>
+<input type="text" id="oceny" placeholder="np. 5, 4, 6, 3">
+<br>
+<button onclick="oblicz()">Oblicz średnią</button>
+
+<p id="wynik"></p>
+
+<script>
+function oblicz() {
+    const pole = document.getElementById("oceny").value;
+    const tablica = pole.split(",").map(x => x.trim()); 
+
+
+    if (tablica.length === 0 || pole.trim() === "") {
+        document.getElementById("wynik").innerText = "nie podano żadnych danych";
+        return;
+    }
+
+    let suma = 0;
+
+    for (let i = 0; i < tablica.length; i++) {
+        const liczba = Number(tablica[i]);
+
+        if (isNaN(liczba) || liczba < 1 || liczba > 6 || !Number.isInteger(liczba)) {
+            document.getElementById("wynik").innerText = "tylko liczby od 1 do 6";
+            return;
+        }
+        suma += liczba;
+    }
+
+    const srednia = suma / tablica.length;
+    document.getElementById("wynik").innerHTML = ` Średnia ocen: <strong>${srednia.toFixed(2)}</strong>`;
+}
+</script>
+
+</body>
+</html>
