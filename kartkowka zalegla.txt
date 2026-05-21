@@ -1,0 +1,56 @@
+1.Napisz skrypt PHP, który wypisze na ekran, w postaci listy numerowanej, nazwiska i imiona
+wszystkich uczniów z klasy 3c posortowanych alfabetycznie nazwiskiem.
+
+
+SELECT u.nazwisko, u.imie
+FROM uczen u
+JOIN klasa k ON u.id_klasa = k.id
+WHERE k.numer = 3 AND k.oznaczenie = '3c'
+ORDER BY u.nazwisko ASC;
+ 
+2. Napisz skrypt PHP, który wypisze na ekran w postaci tabeli składającej się z 3 kolumn: 
+imie, nazwisko, data urodzenia, wszystkich nauczycieli. Dane posortowane mają być po 
+dacie urodzenia malejąco. Pierwszy wiersz tabeli ma być wierszem informacyjnym, co w 
+danej kolumnie się znajduje
+
+
+SELECT imie, nazwisko, data_urodzenia
+FROM nauczyciel
+ORDER BY data_urodzenia DESC;
+
+
+3.  Napisz skrypt PHP, który policzy ile osób (nauczycieli i uczniów) ma imię, które kończy się 
+literą a
+
+SELECT COUNT(*) AS liczba_osob
+FROM (
+    SELECT imie FROM nauczyciel
+    UNION ALL
+    SELECT imie FROM uczen
+) AS osoby
+WHERE imie LIKE '%a';
+
+
+4.Napisz skrypt PHP, który zwiększy wartość każdej oceny w tabeli ocena o 1
+
+
+
+UPDATE ocena
+SET ocena = ocena + 1;
+
+
+
+
+5.Napisz skrypt PHP, który usunie z tabeli nauczyciele wszystkich nauczycieli urodzonych 
+wcześniej niż w roku 1960. Skrypt ma wypisać na ekran ilość takich nauczycieli oraz 
+informację o prawidłowym ich usunięciu z bazy.
+
+
+
+
+SELECT COUNT(*) AS liczba_do_usuniecia
+FROM nauczyciel
+WHERE data_urodzenia < '1960-01-01';
+
+DELETE FROM nauczyciel
+WHERE data_urodzenia < '1960-01-01';
